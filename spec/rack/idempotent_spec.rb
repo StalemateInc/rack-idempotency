@@ -2,7 +2,7 @@ require 'spec_helper'
 
 RSpec.describe Rack::Idempotency do
   let(:app) { lambda { |_| [200, { 'Content-Type' => 'text/plain' }, [SecureRandom.uuid]] } }
-  let(:middleware) { Rack::Idempotency.new(app, store: Rack::Idempotency::MemoryStore.new) }
+  let(:middleware) { Rack::Idempotency.new(app, store: Rack::Idempotency::RedisStore.new(client: Redis.new, ttl: 1)) }
   let(:request) { Rack::MockRequest.new(middleware) }
   let(:key) { SecureRandom.uuid }
 
@@ -11,19 +11,19 @@ RSpec.describe Rack::Idempotency do
   end
 
   context 'without an idempotency key' do
-    subject { request.get('/').body }
+    subject { request.post('/').body }
 
     it { is_expected.to_not be_nil }
   end
 
   context 'with insecure idempotency key' do
-    subject { -> { request.get('/', 'HTTP_IDEMPOTENCY_KEY' => 'x') } }
+    subject { -> { request.post('/', 'HTTP_IDEMPOTENCY_KEY' => 'x') } }
 
     it { is_expected.to raise_error }
   end
 
   context 'with an idempotency key' do
-    subject { request.get('/', 'HTTP_IDEMPOTENCY_KEY' => key).body }
+    subject { request.post('/', 'HTTP_IDEMPOTENCY_KEY' => key).body }
 
     context 'with a successful request' do
       context 'on first request' do
@@ -31,13 +31,13 @@ RSpec.describe Rack::Idempotency do
       end
 
       context 'on second request' do
-        let(:original) { request.get('/', 'HTTP_IDEMPOTENCY_KEY' => key).body }
+        let(:original) { request.post('/', 'HTTP_IDEMPOTENCY_KEY' => key).body }
 
         it { is_expected.to eq(original) }
       end
 
       context 'on different request' do
-        let(:different) { request.get('/', 'HTTP_IDEMPOTENCY_KEY' => SecureRandom.uuid).body }
+        let(:different) { request.post('/', 'HTTP_IDEMPOTENCY_KEY' => SecureRandom.uuid).body }
 
         it { is_expected.to_not eq(different) }
       end
@@ -51,7 +51,7 @@ RSpec.describe Rack::Idempotency do
       end
 
       context 'on second request' do
-        let(:original) { request.get('/', 'HTTP_IDEMPOTENCY_KEY' => key).body }
+        let(:original) { request.post('/', 'HTTP_IDEMPOTENCY_KEY' => key).body }
 
         it { is_expected.to_not eq(original) }
       end
