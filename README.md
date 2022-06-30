@@ -1,8 +1,5 @@
 # Rack::Idempotency
-[![Gem Version](https://badge.fury.io/rb/rack-idempotency.svg)](https://badge.fury.io/rb/rack-idempotency)
-[![Build Status](https://travis-ci.org/guitsaru/rack-idempotency.svg?branch=master)](https://travis-ci.org/guitsaru/rack-idempotency)
-[![Code Climate](https://codeclimate.com/github/guitsaru/rack-idempotency/badges/gpa.svg)](https://codeclimate.com/github/guitsaru/rack-idempotency)
-[![Test Coverage](https://codeclimate.com/github/guitsaru/rack-idempotency/badges/coverage.svg)](https://codeclimate.com/github/guitsaru/rack-idempotency/coverage)
+[![GitHub version](https://badge.fury.io/gh/StalemateInc%2Frack-idempotency.svg)](https://badge.fury.io/gh/StalemateInc%2Frack-idempotency)
 
 Rack middleware ensuring at most once requests for mutating endpoints.
 
@@ -69,9 +66,9 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/guitsaru/rack-idempotency. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/StalemateInc/rack-idempotency. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](https://www.contributor-covenant.org) code of conduct.
 
 
 ## License
 
-The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
