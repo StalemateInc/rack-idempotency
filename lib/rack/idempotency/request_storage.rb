@@ -30,15 +30,12 @@ module Rack
       attr_reader :request, :store
 
       def key
-        Digest::SHA256.hexdigest(hashed_structure.to_s)
+        "idempotency:#{digest}"
       end
 
-      def hashed_structure
-        [
-          request.idempotency_key,
-          request.env.reject { |key, _value| key.start_with?('HTTP_') || key.start_with?('rack.') },
-          request.body.read
-        ]
+      def digest
+        digestable = "#{request.idempotency_key}:#{request.body.read}"
+        Digest::SHA256.hexdigest(digestable)
       end
     end
   end

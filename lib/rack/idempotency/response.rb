@@ -13,10 +13,6 @@ module Rack
         @body    = body
       end
 
-      def success?
-        status.between?(200, 400)
-      end
-
       def to_a
         [status, headers.to_hash, body.map(&:to_s)]
       end

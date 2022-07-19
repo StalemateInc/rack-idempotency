@@ -4,7 +4,8 @@ module Rack
   class Idempotency
     # For all errors
     class Error < RuntimeError
-      attr :env
+      attr_reader :env
+
       def initialize(env)
         @env = env
       end

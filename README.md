@@ -28,12 +28,12 @@ Rack::Idempotency is implemented as a piece of Rack middleware and can be used w
 ```ruby
 require "rack/idempotency"
 
-use Rack::Idempotency, store: Rack::Idempotency::MemoryStore.new
+use Rack::Idempotency, store: Rack::Idempotency::Store::Memory.new
 
 run app
 ```
 
-The `store` argument should be any object that responds to both `read(id)` and `write(id, value)`.  `Rack::Idempotency::MemoryStore` is good for testing, but should not be used in production.
+The `store` argument should be any object that responds to both `read(id)` and `write(id, value)`.  `Rack::Idempotency::Store::Memory` is good for testing, but should not be used in production.
 
 ## Using with Rails
 

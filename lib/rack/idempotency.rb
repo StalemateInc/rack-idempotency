@@ -5,9 +5,10 @@ require 'json'
 require 'rack/idempotency/version'
 
 require 'rack/idempotency/errors'
-require 'rack/idempotency/memory_store'
-require 'rack/idempotency/null_store'
-require 'rack/idempotency/redis_store'
+require 'rack/idempotency/store/base'
+require 'rack/idempotency/store/memory'
+require 'rack/idempotency/store/null'
+require 'rack/idempotency/store/redis'
 require 'rack/idempotency/request'
 require 'rack/idempotency/request_storage'
 require 'rack/idempotency/response'
@@ -19,7 +20,7 @@ module Rack
   # the given cache.  When the client retries, it will get the previously
   # cached response.
   class Idempotency
-    def initialize(app, store: NullStore.new)
+    def initialize(app, store: Store::Null.new)
       @app     = app
       @store   = store
     end
@@ -36,7 +37,7 @@ module Rack
     def store_response(storage, env)
       response = Response.new(*@app.call(env))
 
-      storage.write(response) if response.success?
+      storage.write(response)
 
       response.to_a
     end
